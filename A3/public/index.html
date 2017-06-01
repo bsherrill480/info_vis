@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script type="application/javascript"-->
+            <!--src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js"-->
+    <!--&gt;</script>-->
+    <script type="application/javascript" src="d3.js"></script>
+    <style type="text/css">
+        .bar {
+            fill: steelblue;
+        }
+
+        .bar:hover {
+            fill: brown;
+        }
+
+        .axis--x path {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<svg width="960" height="500"></svg>
+</body>
+<footer>
+    <script type="application/javascript">
+        var DATE4 = '[date4a] Online dating is a good way to meet people';
+        var AGE = 'age';
+        var AGREE = 'AGREE';
+        var DISAGREE = 'DISAGREE';
+        var BUCKET_MAX = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, Infinity];
+        var svg = d3.select("svg");
+        var margin = {top: 20, right: 20, bottom: 30, left: 40};
+        var width = +svg.attr("width") - margin.left - margin.right;
+        var height = +svg.attr("height") - margin.top - margin.bottom;
+
+        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
+        var y = d3.scaleLinear().rangeRound([height, 0]);
+
+        var g = svg.append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // example return
+        // {
+        //   20: {
+        //         agree: 0,
+        //         disagree: 0
+        //       }
+        // ...
+        // }
+        function makeBuckets() {
+            var i;
+            var buckets = {};
+            var bucket;
+            for (i = 0; i < BUCKET_MAX.length; i++) {
+                bucket = BUCKET_MAX[i];
+                buckets[bucket] = {
+                    agree: 0,
+                    disagree: 0,
+                    bucketMaxVal: bucket,
+                }
+            }
+            return buckets;
+        }
+
+        // adds dataitem to buckets
+        function addItemToBuckets(dataItem, buckets) {
+            var responseToQuestion = dataItem[DATE4];
+            var agrees =  responseToQuestion=== AGREE;
+            var disagrees = responseToQuestion === DISAGREE;
+            var age = dataItem[AGE];
+            var i;
+            var bucketMaxVal;
+            var foundBucket = false;
+            var denom;
+            var agreeCount;
+            var disagreeCount;
+            for (i = 0; i < BUCKET_MAX.length; i++) {
+                bucketMaxVal = BUCKET_MAX[i];
+                if (!foundBucket && age < bucketMaxVal) {
+                    foundBucket = true;
+                    if (agrees) {
+                        buckets[bucketMaxVal]['agree'] += 1;
+                    } else if (disagrees) {
+                        buckets[bucketMaxVal]['disagree'] += 1;
+                    } // else null response or something else
+                    agreeCount = buckets[bucketMaxVal]['agree'];
+                    disagreeCount = buckets[bucketMaxVal]['disagree'];
+                    denom = agreeCount + disagreeCount;
+                    buckets[bucketMaxVal]['agreeFreq'] = agreeCount / denom;
+                    buckets[bucketMaxVal]['disagreeFreq'] = disagreeCount / denom;
+                }
+            }
+        }
+
+        // example return
+        // {
+        //   20: {
+        //         agree: 14,
+        //         disagree: 41
+        //       }
+        // ...
+        // }
+        function processDataIntoBuckets(data) {
+            var i;
+            var buckets = makeBuckets();
+            var dataItem;
+            for (i = 0; i < data.length; i++) {
+                dataItem = data[i];
+                addItemToBuckets(dataItem, buckets);
+            }
+            return buckets;
+        }
+
+        // returns
+        // [{ agree: 14, disagree: 41 }, ...]
+        // where each index corresponds to BUCKET_MAX
+        function processData(data) {
+            var buckets = processDataIntoBuckets(data);
+            var i;
+            var bucketMaxVal;
+            var bucketsArray = [];
+            var bucket;
+
+            for (i = 0; i < BUCKET_MAX.length; i++) {
+                bucketMaxVal = BUCKET_MAX[i];
+                bucket = buckets[bucketMaxVal];
+                bucketsArray.push(bucket);
+            }
+            return bucketsArray;
+        }
+
+        function xToReadableValue(d) {
+            if (d === 20) {
+                return '<20'
+            } else if (d === Infinity) {
+                return '>95+'
+            }
+            return (d - 4) + '-' + d;
+        }
+
+        d3.csv('A2.csv', function (error, data) {
+            if (error) { throw error; }
+
+            var buckets = processData(data);
+            console.log(buckets);
+
+//            x.domain(buckets.map(function(d) { return d.bucketMaxVal; }));
+            x.domain(BUCKET_MAX.map(xToReadableValue));
+            y.domain([0, 1]);
+
+            g.append("g")
+                    .attr("class", "axis axis--x")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x));
+
+            g.append("g")
+                    .attr("class", "axis axis--y")
+                    .call(d3.axisLeft(y).ticks(10))
+                    .append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", "0.71em")
+                    .attr("text-anchor", "end")
+                    .text("Frequency");
+//            var barAreas = g.selectAll(".bar")
+//                    .data(buckets)
+//                    .enter().append("rect");
+//
+//            barAreas.attr("class", "bar")
+//                    .attr("x", function(d) {
+//                        console.log('d', d);
+//                        return x(xToReadableValue(d.bucketMaxVal));
+//                    })
+//                    .attr("y", function(d) { return y(d.agreeFreq); })
+//                    .attr("width", x.bandwidth())
+//                    .attr("height", function(d) { return height - y(d.agreeFreq); });
+            var barAreas = g.selectAll(".bar")
+                    .data(buckets)
+                    .enter().append("rect")
+
+            barAreas.attr("class", "bar")
+                    .attr("x", function(d) {
+                        console.log('d', d);
+                        return x(xToReadableValue(d.bucketMaxVal));
+                    })
+                    .attr("y", function(d) { return y(d.agreeFreq); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function(d) { return height - y(d.agreeFreq); });
+        });
+    </script>
+</footer>
+</html>
