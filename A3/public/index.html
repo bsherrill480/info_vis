@@ -24,8 +24,11 @@
 <body>
 <div style="width: 960px; text-align: center;">
     <h2>Age vs Online dating being a good way to meet people</h2>
+    <svg width="960" height="500"></svg>
+    <div>
+        Age range
+    </div>
 </div>
-<svg width="960" height="500"></svg>
 </body>
 <footer>
     <script type="application/javascript">
@@ -172,7 +175,13 @@
             g.append("g")
                     .attr("class", "axis axis--x")
                     .attr("transform", "translate(0," + height + ")")
+                    .text('foo')
                     .call(d3.axisBottom(x0));
+
+            g.append('text')
+                    .attr('x', width/2)
+                    .attr('y', height + 50)
+                    .text('Age range');
 
             g.append("g")
                     .attr("class", "axis axis--y")

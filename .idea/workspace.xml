@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="235f7b1c-75e9-4e9f-940c-3e554a1a72fd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/A3/public/attempt2.html" afterPath="$PROJECT_DIR$/A3/public/attempt2.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/A3/public/index.html" afterPath="$PROJECT_DIR$/A3/public/index.html" />
     </list>
     <ignored path="info_vis.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,8 +25,8 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/A3/public/index.html">
+      <file leaf-file-name="old_attempt.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/A3/public/old_attempt.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="300">
               <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
@@ -34,11 +35,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="attempt2.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/A3/public/attempt2.html">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/A3/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="25" column="59" selection-start-line="25" selection-start-column="59" selection-end-line="25" selection-end-column="59" />
+            <state relative-caret-position="368">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
@@ -77,8 +78,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/A3/pt2/app.js" />
         <option value="$PROJECT_DIR$/A3/pt2/public/index.html" />
-        <option value="$PROJECT_DIR$/A3/public/index.html" />
         <option value="$PROJECT_DIR$/A3/public/attempt2.html" />
+        <option value="$PROJECT_DIR$/A3/public/index.html" />
       </list>
     </option>
   </component>
@@ -622,7 +623,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/A3/public/index.html">
+    <entry file="file://$PROJECT_DIR$/A3/public/old_attempt.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
@@ -630,10 +631,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/A3/public/attempt2.html">
+    <entry file="file://$PROJECT_DIR$/A3/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="25" column="59" selection-start-line="25" selection-start-column="59" selection-end-line="25" selection-end-column="59" />
+        <state relative-caret-position="368">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
