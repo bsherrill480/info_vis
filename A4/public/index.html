@@ -23,6 +23,8 @@
 </head>
 <body>
 <div style="width: 960px; text-align: center;">
+    To see other graph, <a href="other.html">go here </a>
+    <hr>
     <h2>Congress balance of power</h2>
     <svg id="line-graph" width="960" height="500"></svg>
 </div>
@@ -82,14 +84,6 @@
 
                 y.domain(yExtent);
 
-//                var xAxis = d3.svg.axis()
-//                        .orient('bottom')
-//                        .scale(x);
-//
-//                var yAxis = d3.svg.axis()
-//                        .orient('left')
-//                        .scale(y);
-
                 vis.append('line')
                         .attr('x1', x(xExtent[0]))
                         .attr('x2', x(xExtent[1]))
@@ -101,7 +95,7 @@
                 vis.append('g')
                         .attr('transform', 'translate(0,' + height + ')')
                         .call(d3.axisBottom(x).tickFormat(d3.format('d')));
-//
+
                 var yAxisG = vis.append('g')
                         .call(d3.axisLeft(y));
 
@@ -148,7 +142,6 @@
                                 ')'
                         )
                         .text('Year');
-
             });
         })();
     </script>

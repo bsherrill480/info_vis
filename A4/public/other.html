@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--<script type="application/javascript"-->
+            <!--src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js"-->
+    <!--&gt;</script>-->
+    <script type="application/javascript" src="d3.js"></script>
+    <style type="text/css">
+        .bar {
+            fill: steelblue;
+        }
+
+        .bar:hover {
+            fill: brown;
+        }
+
+        .axis--x path {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div style="width: 960px; text-align: center;">
+    To see line chart, <a href="index.html">go here </a>
+    <hr>
+    <h2>Congress balance of power</h2>
+    <input id="num-buckets" type="number" value="10">
+    <button onclick="makeGraph();">Set Num Buckets</button>
+    <svg id="line-graph" width="1160" height="500"></svg>
+</div>
+</body>
+<footer>
+    <script type="application/javascript">
+        function makeGraph () {
+            window.numBuckets = +document.getElementById('num-buckets').value;
+            var POWER_BALANCE = 'Power Balance';
+            var YEAR = 'Year';
+            var svg = d3.select("#line-graph");
+            var margin = {top: 20, right: 20, bottom: 80, left: 80};
+            var svgWidth = +svg.attr("width");
+            var svgHeight = +svg.attr("height");
+            var width = svgWidth - margin.left - margin.right;
+            var height = svgHeight - margin.top - margin.bottom;
+            var Y_AXIS_EXTRA_RANGE = 10;
+            var irange;
+
+            svg.selectAll('*').remove();
+
+            var vis = svg.append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var x = d3.scaleLinear()
+                    .rangeRound([0, width]);
+
+            var demScale = d3.scaleLinear()
+                    .range(['white', 'blue']);
+
+            var repubScale = d3.scaleLinear()
+                    .range(['white', 'red']);
+
+            var getColor = function (val) {
+                return val < 0 ? demScale(val) : repubScale(val);
+            };
+
+            var bucketRange = [];
+
+            for (irange = 0; irange < window.numBuckets; irange++) {
+                bucketRange[irange] = irange;
+            }
+
+            var getBucket = d3.scaleQuantile()
+                    .range(bucketRange);
+
+            function processData(d) {
+                d[POWER_BALANCE] = +d[POWER_BALANCE];
+                d[YEAR] = +d[YEAR];
+                return d;
+            }
+
+            function dataToBuckets(data) {
+                var i;
+                var datum;
+                var buckets = [];
+                var bucket;
+
+                for (irange = 0; irange < window.numBuckets; irange++) {
+                    buckets[irange] = 0;
+                }
+
+                for (i=0; i < data.length; i++) {
+                    datum = data[i];
+                    bucket = getBucket(datum[YEAR]);
+                    buckets[bucket] += datum[POWER_BALANCE];
+                }
+
+                return buckets
+            }
+
+            d3.csv('A4.csv', processData, function (error, data) {
+                if (error) { throw error; }
+
+                var xExtent = d3.extent(data, function (d) {
+                    return d[YEAR];
+                });
+
+                x.domain([0, window.numBuckets]);
+
+                getBucket.domain(xExtent);
+
+                var buckets = dataToBuckets(data);
+                var bucketQuantiles = getBucket.quantiles();
+
+                for (var j = 0; j < bucketQuantiles.length; j++) {
+                    bucketQuantiles[j] = parseInt(bucketQuantiles[j]);
+                }
+
+                var bucketsExtent = d3.extent(buckets);
+                var bucketAbsMax = Math.max(Math.abs(bucketsExtent[0]), Math.abs(bucketsExtent[1]));
+
+                repubScale.domain([0, bucketAbsMax]);
+                demScale.domain([0, -1 * bucketAbsMax]);
+
+                console.log('buckets', buckets, bucketQuantiles);
+
+                vis.selectAll('.tile')
+                        .data(buckets)
+                        .enter()
+                        .append('rect')
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', 2)
+                        .attr('class', 'tile')
+                        .attr('x', function (d, i) {
+                            return x(i);
+                        })
+                        .attr('width', x(1) - x(0) - 10)
+                        .attr('height', 50)
+                        .style('fill', function (d) {
+                            return getColor(d);
+                        });
+                vis.selectAll('.bucket')
+                        .data(bucketQuantiles)
+                        .enter()
+                        .append('text')
+                        .attr('class', 'bucket')
+                        .attr('x', function (d, i) {
+                            return x(i) + (x(1) - x(0) - 20)
+                        })
+                        .attr('y', function (d, i) {
+                            return 65;
+                        })
+                        .text(function (d, i) {
+                            return '' + d;
+//                            if (i == 0) {
+//                                return '' + xExtent[0] + ' - ' + d;
+//                            }
+//                            if (i == bucketQuantiles.length -  1) {
+//                                return '' + d + ' - ' + xExtent[1];
+//                            }
+//                            return '' + bucketQuantiles[i - 1] + ' - ' + d;
+                        });
+            });
+        }
+        makeGraph();
+    </script>
+</footer>
+</html>
