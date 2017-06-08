@@ -1,3 +1,5 @@
+I totally forgot to comment my code. Sorry.
+
 For my line chart, I used https://bl.ocks.org/mbostock/3883245 as a starting point.
 
 my my 2nd chart, I used http://bl.ocks.org/tjdecke/5558084 and http://bl.ocks
