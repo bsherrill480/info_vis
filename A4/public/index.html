@@ -23,220 +23,134 @@
 </head>
 <body>
 <div style="width: 960px; text-align: center;">
-    <h2>Age vs Online dating being a good way to meet people</h2>
-    <svg width="960" height="500"></svg>
-    <div>
-        Age range
-    </div>
+    <h2>Congress balance of power</h2>
+    <svg id="line-graph" width="960" height="500"></svg>
 </div>
 </body>
 <footer>
     <script type="application/javascript">
-        var DATE4 = '[date4a] Online dating is a good way to meet people';
-        var AGE = 'age';
-        var AGREE = 'AGREE';
-        var DISAGREE = 'DISAGREE';
-        var BUCKET_MAX = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, Infinity];
-        var svg = d3.select("svg");
-        var margin = {top: 20, right: 20, bottom: 30, left: 40};
-        var width = +svg.attr("width") - margin.left - margin.right;
-        var height = +svg.attr("height") - margin.top - margin.bottom;
+        (function () {
+            var POWER_BALANCE = 'Power Balance';
+            var YEAR = 'Year';
+            var svg = d3.select("#line-graph");
+            var margin = {top: 20, right: 20, bottom: 80, left: 80};
+            var svgWidth = +svg.attr("width");
+            var svgHeight = +svg.attr("height");
+            var width = svgWidth - margin.left - margin.right;
+            var height = svgHeight - margin.top - margin.bottom;
+            var Y_AXIS_EXTRA_RANGE = 10;
 
-//        var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
-//        var y = d3.scaleLinear().rangeRound([height, 0]);
+            var vis = svg.append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var x0 = d3.scaleBand()
-                .rangeRound([0, width])
-                .paddingInner(0.1);
+            var x = d3.scaleLinear()
+                    .rangeRound([0, width]);
 
-        var x1 = d3.scaleBand()
-                .padding(0.05);
+            var y = d3.scaleLinear()
+                    .rangeRound([height, 0]);
 
-        var y = d3.scaleLinear()
-                .rangeRound([height, 0]);
-
-        var z = d3.scaleOrdinal()
-                .range(["#98abc5", "#ff8c00"]);
-
-        var g = svg.append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        // example return
-        // {
-        //   20: {
-        //         agree: 0,
-        //         disagree: 0
-        //       }
-        // ...
-        // }
-        function makeBuckets() {
-            var i;
-            var buckets = {};
-            var bucket;
-            for (i = 0; i < BUCKET_MAX.length; i++) {
-                bucket = BUCKET_MAX[i];
-                buckets[bucket] = {
-                    agree: 0,
-                    disagree: 0,
-                    bucketMaxVal: bucket,
-                    readableBucket: xToReadableValue(bucket)
-                }
-            }
-            return buckets;
-        }
-
-        // adds dataitem to buckets
-        function addItemToBuckets(dataItem, buckets) {
-            var responseToQuestion = dataItem[DATE4];
-            var agrees =  responseToQuestion=== AGREE;
-            var disagrees = responseToQuestion === DISAGREE;
-            var age = dataItem[AGE];
-            var i;
-            var bucketMaxVal;
-            var foundBucket = false;
-            var denom;
-            var agreeCount;
-            var disagreeCount;
-            for (i = 0; i < BUCKET_MAX.length; i++) {
-                bucketMaxVal = BUCKET_MAX[i];
-                if (!foundBucket && age < bucketMaxVal) {
-                    foundBucket = true;
-                    if (agrees) {
-                        buckets[bucketMaxVal]['agree'] += 1;
-                    } else if (disagrees) {
-                        buckets[bucketMaxVal]['disagree'] += 1;
-                    } // else null response or something else
-                    agreeCount = buckets[bucketMaxVal]['agree'];
-                    disagreeCount = buckets[bucketMaxVal]['disagree'];
-                    denom = agreeCount + disagreeCount;
-                    buckets[bucketMaxVal]['agreeFreq'] = agreeCount / denom;
-                    buckets[bucketMaxVal]['disagreeFreq'] = disagreeCount / denom;
-                }
-            }
-        }
-
-        // example return
-        // {
-        //   20: {
-        //         agree: 14,
-        //         disagree: 41
-        //       }
-        // ...
-        // }
-        function processDataIntoBuckets(data) {
-            var i;
-            var buckets = makeBuckets();
-            var dataItem;
-            for (i = 0; i < data.length; i++) {
-                dataItem = data[i];
-                addItemToBuckets(dataItem, buckets);
-            }
-            return buckets;
-        }
-
-        // returns
-        // [{ agree: 14, disagree: 41 }, ...]
-        // where each index corresponds to BUCKET_MAX
-        function processData(data) {
-            var buckets = processDataIntoBuckets(data);
-            var i;
-            var bucketMaxVal;
-            var bucketsArray = [];
-            var bucket;
-
-            for (i = 0; i < BUCKET_MAX.length; i++) {
-                bucketMaxVal = BUCKET_MAX[i];
-                bucket = buckets[bucketMaxVal];
-                bucketsArray.push(bucket);
-            }
-            return bucketsArray;
-        }
-
-        function xToReadableValue(d) {
-            if (d === 20) {
-                return '<20'
-            } else if (d === Infinity) {
-                return '>95+'
-            }
-            return (d - 4) + '-' + d;
-        }
-
-        d3.csv('A2.csv', function (error, data) {
-            if (error) { throw error; }
-
-            var buckets = processData(data);
-            console.log(buckets);
-
-//            x.domain(buckets.map(function(d) { return d.bucketMaxVal; }));
-            x0.domain(BUCKET_MAX.map(xToReadableValue));
-            x1.domain(['agree', 'disagree']).rangeRound([0, x0.bandwidth()]);
-            y.domain([0, 1]);
-
-            g.append("g")
-                    .attr("class", "axis axis--x")
-                    .attr("transform", "translate(0," + height + ")")
-                    .text('foo')
-                    .call(d3.axisBottom(x0));
-
-            g.append('text')
-                    .attr('x', width/2)
-                    .attr('y', height + 50)
-                    .text('Age range');
-
-            g.append("g")
-                    .attr("class", "axis axis--y")
-                    .call(d3.axisLeft(y).ticks(10, '%'))
-                    .append("text")
-                    .attr("transform", "rotate(-90)")
-                    .attr("y", 6)
-                    .attr("dy", "0.71em")
-                    .attr("text-anchor", "end")
-                    .text("Frequency");
-
-            g.append("g")
-                    .selectAll("g")
-                    .data(buckets)
-                    .enter().append("g")
-                    .attr("transform", function(d) {
-//                        console.log('d', d);
-                        return "translate(" + x0(d.readableBucket) + ",0)";
+            var line = d3.line()
+                    .x(function (d) {
+                        return x(d[YEAR]);
                     })
-                    .selectAll("rect")
-                    .data(function(d) {
-                        return [
-                            {key: 'agree', value: d.agreeFreq },
-                            {key: 'disagree', value: d.disagreeFreq }
-                        ];
-//                        return keys.map(function(key) { return {key: key, value: d[key]}; });
-                    })
-                    .enter().append("rect")
-                    .attr("x", function(d) { return x1(d.key); })
-                    .attr("y", function(d) { return y(d.value); })
-                    .attr("width", x1.bandwidth())
-                    .attr("height", function(d) { return height - y(d.value); })
-                    .attr("fill", function(d) { return z(d.key); });
+                    .y(function (d) {
+                        console.log('y ' + d[POWER_BALANCE]);
+                        return y(d[POWER_BALANCE]);
+                    });
 
-            var legend = g.append("g")
-                    .attr("font-family", "sans-serif")
-                    .attr("font-size", 10)
-                    .attr("text-anchor", "end")
-                    .selectAll("g")
-                    .data(['agree', 'disagree'])
-                    .enter().append("g")
-                    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+            function processData(d) {
+                d[POWER_BALANCE] = +d[POWER_BALANCE];
+                d[YEAR] = +d[YEAR];
+                return d;
+            }
 
-            legend.append("rect")
-                    .attr("x", width - 19)
-                    .attr("width", 19)
-                    .attr("height", 19)
-                    .attr("fill", z);
+            d3.csv('A4.csv', processData, function (error, data) {
+                if (error) { throw error; }
 
-            legend.append("text")
-                    .attr("x", width - 24)
-                    .attr("y", 9.5)
-                    .attr("dy", "0.32em")
-                    .text(function(d) { return d; });
-        });
+                var yExtent = d3.extent(data, function (d) {
+                    return d[POWER_BALANCE];
+                });
+
+                yExtent[0] -= Y_AXIS_EXTRA_RANGE;
+                yExtent[1] += 10;
+
+                var xExtent = d3.extent(data, function (d) {
+                    return d[YEAR];
+                });
+
+                x.domain(xExtent);
+
+                y.domain(yExtent);
+
+//                var xAxis = d3.svg.axis()
+//                        .orient('bottom')
+//                        .scale(x);
+//
+//                var yAxis = d3.svg.axis()
+//                        .orient('left')
+//                        .scale(y);
+
+                vis.append('line')
+                        .attr('x1', x(xExtent[0]))
+                        .attr('x2', x(xExtent[1]))
+                        .attr('y1', y(0))
+                        .attr('y2', y(0))
+                        .attr('stroke-width', 1)
+                        .attr('stroke', 'black');
+
+                vis.append('g')
+                        .attr('transform', 'translate(0,' + height + ')')
+                        .call(d3.axisBottom(x).tickFormat(d3.format('d')));
+//
+                var yAxisG = vis.append('g')
+                        .call(d3.axisLeft(y));
+
+                yAxisG
+                        .append('text')
+                        .attr("transform", "rotate(-90)")
+                        .attr('fill', '#000')
+                        .attr('y', 6)
+                        .attr('dy', '0.71em')
+                        .text('Republican');
+
+                yAxisG
+                        .append('text') // To Textr
+                        .attr('x', -height + 55) // Got me some magic number here
+                        .attr('y', 6)
+                        .attr("transform", "rotate(-90)")
+                        .attr('fill', '#000')
+                        .attr('dy', '0.71em')
+                        .text('Democrat');
+
+                vis.append('path')
+                        .datum(data)
+                        .attr('fill', 'none')
+                        .attr('stroke', 'steelblue')
+                        .attr('stroke-linejoin', 'miter')
+                        .attr('stroke-linecap', 'round')
+                        .attr('stroke-width', 1.5)
+                        .attr('d', line);
+
+                svg.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr(
+                                'transform',
+                                'translate(' + (margin.left/2) +',' + (height/2) + ')rotate(-90)'
+                        )
+                        .text('Power Balance');
+
+                svg.append('text')
+                        .attr('text-anchor', 'middle')
+                        .attr(
+                                'transform',
+                                'translate(' + (svgWidth/2) + ',' +
+                                (svgHeight-(margin.bottom/2)) +
+                                ')'
+                        )
+                        .text('Year');
+
+            });
+        })();
     </script>
 </footer>
 </html>
