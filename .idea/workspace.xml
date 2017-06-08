@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="235f7b1c-75e9-4e9f-940c-3e554a1a72fd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/A4/public/other.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/A4/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/A4/public/index.html" afterPath="$PROJECT_DIR$/A4/public/index.html" />
     </list>
     <ignored path="info_vis.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,7 +25,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="other.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="other.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/A4/public/other.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
@@ -36,10 +35,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/A4/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="553">
+              <caret line="42" column="51" selection-start-line="42" selection-start-column="51" selection-end-line="42" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="A4.csv" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/A4/public/A4.csv">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1349">
+            <state relative-caret-position="0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -72,6 +81,7 @@
         <option value="$PROJECT_DIR$/A4/debug.js" />
         <option value="$PROJECT_DIR$/A4/public/index.html" />
         <option value="$PROJECT_DIR$/A4/public/other.html" />
+        <option value="$PROJECT_DIR$/A4/README.md" />
       </list>
     </option>
   </component>
@@ -710,18 +720,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/A4/public/other.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="147" column="58" selection-start-line="147" selection-start-column="58" selection-end-line="147" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/A4/public/A4.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1349">
+        <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/A4/public/other.html">
+    <entry file="file://$PROJECT_DIR$/A4/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="147" column="58" selection-start-line="147" selection-start-column="58" selection-end-line="147" selection-end-column="58" />
+        <state relative-caret-position="553">
+          <caret line="42" column="51" selection-start-line="42" selection-start-column="51" selection-end-line="42" selection-end-column="51" />
           <folding />
         </state>
       </provider>
