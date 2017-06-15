@@ -6,25 +6,53 @@
     {{ bokeh_css }}
     {{ bokeh_js }}
     <style>
-      h1 {
-          margin: 2em 0 0 0;
-          color: #2e484c;
-          font-family: 'Julius Sans One', sans-serif;
-          font-size: 1.4em;
-          text-transform: uppercase;
+      body {
+        font-family: sans-serif;
+      }
+      .plot-width {
+        width: 900px;
+      }
+      .plot-hr {
+        	border-top: 3px solid;
+      }
+      .left-space {
+        margin-left: 60px;
+      }
+      .footer-container {
+        display: flex;
+        justify-content: space-between;
+      }
+      .main-header {
+        font-size: 2.5em;
+        font-weight: bold;
+      }
+      .second-header {
+        font-size: 1.75em;
+      }
+      .text-right {
+        text-align: right;
       }
     </style>
   </head>
   <body>
-    <div>
-      <h1>Export data to CSV</h1>
-      <p> This demo uses a <code>CustomJS</code> callback to export <code>DataTable</code> contents to CSV.
-      <p><b>NOTE</b>: On Safari the CSV will open in a new tab, rather than downloading.</p>
-      <ul style="list-style-type:circle">
-        <li>Scrub the "Max Salary" slider and watch the <code>DataTable</code> change.</li>
-        <li>Click the "Download" button to export data to a CSV file.</li>
-      </ul>
+    <div class="left-space">
+      <div class="main-header">The Most popular National parks</div>
+      <div class="second-header">National Parks Ranked by number of visitors in a given year</div>
     </div>
     {{ plot_div|indent(8) }}
     {{ plot_script|indent(8) }}
+    <div class="plot-width">
+      <hr class="plot-hr">
+      <div class="footer-container">
+        <div>Brian Sherrill</div>
+        <div class="text-right">
+          <div>Reproduced from fivethirtyeight</div>
+          <small>
+            <a href="https://fivethirtyeight.com/features/the-national-parks-have-never-been-more-popular/">
+              https://fivethirtyeight.com/features/the-national-parks-have-never-been-more-popular/
+            </a>
+          </small>
+        </div>
+      </div>
+    </div>
   </body>

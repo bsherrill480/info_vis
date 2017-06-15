@@ -2,6 +2,23 @@ import pandas as pd
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import FuncTickFormatter, FixedTicker, Title, TickFormatter
 from bokeh.palettes import Category10
+from bokeh.embed import file_html
+from bokeh.resources import CDN
+from bokeh.core.templates import FILE
+from os.path import join, dirname
+
+### https://github.com/bokeh/bokeh/blob/master/bokeh/core/templates.py
+### START TEMPLATE SETUP
+import json
+from jinja2 import Environment, FileSystemLoader, Markup
+
+templates_path = join(dirname(__file__), 'templates')
+_env = Environment(loader=FileSystemLoader(templates_path))
+_env.filters['json'] = lambda obj: Markup(json.dumps(obj))
+
+template = _env.get_template('index.html')
+
+### END
 
 # Consts
 CATEGORY_NUM = 10
@@ -72,7 +89,7 @@ data[RANK] = rank
 output_file(OUTPUT_FILE_NAME)
 
 # create a new plot with a title and axis labels
-p = figure(y_range=(-60, 2), plot_width=PLOT_DIM, plot_height=PLOT_DIM, x_range=(1900, 2045))
+p = figure(y_range=(-60, 2), plot_width=PLOT_DIM, plot_height=PLOT_DIM, x_range=(1900, 2050))
 p.background_fill_color = '#F0F0F0'
 p.yaxis.ticker = FixedTicker(ticks=[-1, -25, -50])
 p.xaxis.ticker = FixedTicker(ticks=[1925, 1950, 1975, 2000])
@@ -87,7 +104,6 @@ p.yaxis.formatter = FuncTickFormatter(code="""
 
 
 park_names = data[PARK].unique()
-print(len(park_names))
 for park_name in park_names:
     if park_name not in COLORED_PARK_NAMES:
         park_rows = data.loc[data[PARK] == park_name]
@@ -115,5 +131,9 @@ for i, park_name in enumerate(COLORED_PARK_NAMES):
         # manually finding positioning for Great
         p.text(x_values_list[-1] - 40, -.5, text=[park_name_display], text_color=line_color)
 
-show(p)
+# show(p)
+html = file_html(p, CDN, 'myplot', template=template)
+
+with open(OUTPUT_FILE_NAME, 'w+') as f:
+    f.writelines(html)
 
