@@ -1,8 +1,7 @@
 import pandas as pd
 from bokeh.plotting import figure, output_file, show
-from bokeh.models import FuncTickFormatter, FixedTicker
+from bokeh.models import FuncTickFormatter, FixedTicker, Title, TickFormatter
 from bokeh.palettes import Category10
-# from bokeh.io import curdoc
 
 # Consts
 CATEGORY_NUM = 10
@@ -54,19 +53,11 @@ data[PARK] = data[PARK].fillna('')
 data = data[data[PARK].str.contains(' NP')]
 data = data[~data[PARK].str.contains('NPRES')]
 
-# # convert to same datatype
-# data[[RV_CAMPERS, BACKCOUNTRY_CAMPERS, TENT_CAMPERS, RECREATION_VISITORS]] = \
-#     data[[RV_CAMPERS, BACKCOUNTRY_CAMPERS, TENT_CAMPERS, RECREATION_VISITORS]].apply(
-#         pd.to_numeric
-#     )
-
 # fill empty data
 data[RV_CAMPERS] = data[RV_CAMPERS].fillna(0.0)
 data[BACKCOUNTRY_CAMPERS] = data[BACKCOUNTRY_CAMPERS].fillna(0.0)
 data[TENT_CAMPERS] = data[TENT_CAMPERS].fillna(0.0)
-# data[RECREATION_VISITORS] = pd.to_numeric(data[RECREATION_VISITORS], errors='coerce')
 data[RECREATION_VISITORS] = data[RECREATION_VISITORS].fillna(0.0)
-# data['Unnamed: 6'] = data['Unnamed: 6']
 
 # get total
 data[TOTAL_VISITORS] = data[RV_CAMPERS] + \
@@ -75,15 +66,12 @@ data[TOTAL_VISITORS] = data[RV_CAMPERS] + \
                        data[RECREATION_VISITORS]
 
 # add rank
-# rank = data.groupby([YEAR])[TOTAL_VISITORS].rank(ascending=False)
 rank = data.groupby([YEAR])[RECREATION_VISITORS].rank(ascending=False)
 data[RANK] = rank
 
 output_file(OUTPUT_FILE_NAME)
 
 # create a new plot with a title and axis labels
-# y_range = [str(i) for i in range(70, 0, -1)]
-# p = figure(title="simple line example", y_range=y_range)
 p = figure(y_range=(-60, 2), plot_width=PLOT_DIM, plot_height=PLOT_DIM, x_range=(1900, 2045))
 p.background_fill_color = '#F0F0F0'
 p.yaxis.ticker = FixedTicker(ticks=[-1, -25, -50])
@@ -91,7 +79,7 @@ p.xaxis.ticker = FixedTicker(ticks=[1925, 1950, 1975, 2000])
 p.grid.grid_line_width = 2
 p.ygrid.ticker = FixedTicker(ticks=[-1, -25, -50])
 p.xgrid.ticker = FixedTicker(ticks=[1925, 1950, 1975, 2000])
-p.yaxis.axis_label = 'Rank'
+p.add_layout(Title(text='Rank', align="center"), 'left')
 
 p.yaxis.formatter = FuncTickFormatter(code="""
     return Math.abs(tick) + (tick == -1 ? 'st' : 'th')
@@ -127,9 +115,5 @@ for i, park_name in enumerate(COLORED_PARK_NAMES):
         # manually finding positioning for Great
         p.text(x_values_list[-1] - 40, -.5, text=[park_name_display], text_color=line_color)
 
-# p.add_layout(Title(text='Foobar1', align='left', offset=100), 'above')
-# p.add_layout(Title(text='Foobar2', align='left'), 'above')
 show(p)
-# curdoc().add_root(p)
-# curdoc().title = 'Export CSV'
 
