@@ -1,6 +1,6 @@
 import pandas as pd
 from bokeh.plotting import figure, output_file, show
-from bokeh.models import FuncTickFormatter, FixedTicker, Title
+from bokeh.models import FuncTickFormatter, FixedTicker
 from bokeh.palettes import Category10
 # from bokeh.io import curdoc
 
@@ -88,7 +88,10 @@ p = figure(y_range=(-60, 2), plot_width=PLOT_DIM, plot_height=PLOT_DIM, x_range=
 p.background_fill_color = '#F0F0F0'
 p.yaxis.ticker = FixedTicker(ticks=[-1, -25, -50])
 p.xaxis.ticker = FixedTicker(ticks=[1925, 1950, 1975, 2000])
-p.grid.grid_line_color = None
+p.grid.grid_line_width = 2
+p.ygrid.ticker = FixedTicker(ticks=[-1, -25, -50])
+p.xgrid.ticker = FixedTicker(ticks=[1925, 1950, 1975, 2000])
+p.yaxis.axis_label = 'Rank'
 
 p.yaxis.formatter = FuncTickFormatter(code="""
     return Math.abs(tick) + (tick == -1 ? 'st' : 'th')
