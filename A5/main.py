@@ -22,7 +22,7 @@ template = _env.get_template('index.html')
 
 # Consts
 CATEGORY_NUM = 10
-OUTPUT_FILE_NAME = 'output.html'
+OUTPUT_FILE_NAME = 'index.html'
 GREAT_SMOKEY_MOUNTAINS = 'Great Smoky Mountains NP'
 COLORED_PARK_NAMES = {
     GREAT_SMOKEY_MOUNTAINS,
